@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import veiculo
@@ -7,8 +7,13 @@ from .forms import VeiculoForm
 
 from .models import modelo
 
-def index(request):
-    return render(request, "index.html",)
+class VeiculoListView(ListView):
+    model = veiculo
+    template_name = 'list_veiculo.html'
+    context_object_name = 'veiculos'
+    
+    def get_queryset(self):
+        return veiculo.objects.all().order_by('-created_at')
 
 # Criar uma nova tarefa
 class AddVeiculo(CreateView):
